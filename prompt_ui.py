@@ -3,7 +3,7 @@ from langchain_community.llms import HuggingFaceHub
 from langchain_core.prompts import load_prompt
 import streamlit as st
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = "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"
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "HUGGINGFACEHUB_API_TOKEN"
 
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
