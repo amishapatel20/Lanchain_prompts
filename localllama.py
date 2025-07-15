@@ -1,4 +1,3 @@
-from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.llms import Ollama
@@ -6,28 +5,36 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 
+
+st.set_page_config(page_title="AI Code Tutor | LangChain + Ollama")
+
 load_dotenv()
 
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-os.environ["LANGCHAIN_API_KEY"]=""
+os.environ["LANGCHAIN_TRACING_V2"] = "false"
+os.environ["LANGCHAIN_API_KEY"] = ""
 
 
-prompt=ChatPromptTemplate.from_messages(
-    [
-        ("system","You are a helpful assistant. Please response to the user queries"),
-        ("user","Question:{question}")
-    ]
-)
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a code tutor. Help the user with code questions. Give clear explanations followed by code examples."),
+    ("user", "Question: {question}")
+])
 
 
-st.title('Langchain Demo With LLAMA2 API')
-input_text=st.text_input("Search the topic u want")
+st.title('🤖 AI Code Tutor ')
 
 
-llm = Ollama(model="llama2:latest")
+input_text = st.text_input("Enter your programming question here...")
 
-output_parser=StrOutputParser()
-chain=prompt|llm|output_parser
+
+llm = Ollama(model="mistral")
+output_parser = StrOutputParser()
+chain = prompt | llm | output_parser
+
 
 if input_text:
-    st.write(chain.invoke({"question":input_text}))
+    response = chain.invoke({"question": input_text})
+   
+    if "```" in response:
+        st.markdown(response)
+    else:
+        st.write(response)
